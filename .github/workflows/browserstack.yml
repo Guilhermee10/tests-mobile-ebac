@@ -1,0 +1,59 @@
+name: Testes mobile - BrowserStack
+
+on:
+  push:
+    branches: [ci]
+  workflow_dispatch: # permite rodar manualmente pela aba Actions
+
+jobs:
+  mobile-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Definir o app que será testado
+        env:
+          APP_ID: ${{ secrets.BROWSERSTACK_APP_ID }} # opcional: id bs://... de um app já enviado
+        run: |
+          if [ -n "$APP_ID" ]; then
+            echo "Usando o app já enviado ao BrowserStack: $APP_ID"
+            echo "BROWSERSTACK_APP=$APP_ID" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          APP_FILE=$(find app -type f \( -name '*.apk' -o -name '*.aab' \) | head -n 1 || true)
+
+          if [ -z "$APP_FILE" ]; then
+            echo "::error::Nenhum .apk ou .aab encontrado na pasta app/. O BrowserStack não aceita .apks (bundletool). Envie um .apk/.aab ou defina o secret BROWSERSTACK_APP_ID."
+            exit 1
+          fi
+
+          echo "Usando o app do repositório: $APP_FILE"
+          echo "BROWSERSTACK_APP=$GITHUB_WORKSPACE/$APP_FILE" >> "$GITHUB_ENV"
+
+      - name: Rodar os testes no BrowserStack
+        run: npx wdio run ./config/wdio.browserstack.conf.js
+
+      - name: Salvar os resultados do Allure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          if-no-files-found: ignore
