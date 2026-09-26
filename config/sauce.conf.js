@@ -1,6 +1,6 @@
 import { generalConf } from "./general.conf.js";
 
-export let localConf = {
+export let sauceConf = {
     user: process.env.SAUCE_USERNAME,
     key: process.env.SAUCE_ACCESS_KEY,
     hostname: 'ondemand.us-west-1.saucelabs.com',
