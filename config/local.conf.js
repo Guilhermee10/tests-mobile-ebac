@@ -1,4 +1,4 @@
-import generalConf from "./general.conf.js";
+import { generalConf } from "./general.conf.js";
 
 export let localConf = {
     runner: 'local',

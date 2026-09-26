@@ -1,4 +1,4 @@
-import generalConf from "./general.conf.js";
+import { generalConf } from "./general.conf.js";
 
 export let bsConf = {
     user: process.env.BROWSERSTACK_USERNAME,
@@ -11,7 +11,7 @@ export let bsConf = {
             'appium:deviceName': 'Samsung.*',
             'appium:platformVersion': '10',
             'appium:automationName': 'UiAutomator2',
-            'appium:app': 'storage:filename=ebacshop (1).aab', // The filename of the mobile app
+            'appium:app': process.env.BROWSERSTACK_APP_URL, // preenchido pelo workflow a cada upload
 
         }
 
@@ -21,7 +21,7 @@ export let bsConf = {
             'appium:deviceName': 'iphone 15',
             'appium:platformVersion': '17.0',
             'appium:automationName': 'XCUITest',
-            'appium:app': 'storage:filename=ebacshop (1).aab', // The filename of the mobile app
+            'appium:app': process.env.BROWSERSTACK_APP_URL,
         }
     ],
     commonCapabilities: {

@@ -1,7 +1,7 @@
-import { suitesConf } from '/suites.conf.js'
-import { specsConf } from '/specs.conf.js'
-import { specsConf } from '/reports.conf.js'
-import { specsConf } from '/hooks.conf.js'
+import { suitesConf } from './suites.conf.js'
+import { specsConf } from './specs.conf.js'
+import { reportsConf } from './reports.conf.js'
+import { hooksConf } from './hooks.conf.js'
 
 export let generalConf = {
     maxInstances: 1,
@@ -16,7 +16,6 @@ export let generalConf = {
     },
     ...specsConf,
     ...suitesConf,
-    ...reportersConf,
+    ...reportsConf,
     ...hooksConf
 };
-
