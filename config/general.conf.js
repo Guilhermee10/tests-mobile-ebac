@@ -7,7 +7,7 @@ export let generalConf = {
     maxInstances: 1,
     logLevel: 'info',
     waitforTimeout: 10000,
-    connectionRetryTimeout: 12000,
+    connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
     framework: 'mocha',
     mochaOpts: {
